@@ -3,7 +3,7 @@
       <nav>
         <ul class="nav-list">
           <li @click="$router.push({name:'all'})" :class="{'nav-item-active':$route.name==='all'}" class="nav-item">All</li>
-          <li @click="$router.push({name: 'about'})" class="nav-item">
+          <li @click="$router.push({name: 'hot'})" :class="{'nav-item-active':$route.name==='hot'}" class="nav-item">
             <img class="icon" :src="hotIcon" >
             Hot</li>
           <li class="nav-item">Show HN</li>

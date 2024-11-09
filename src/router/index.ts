@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
+import HotView from '../views/HotView.vue'
 import AllView from '../views/AllView.vue'
 import StoryDetailsView from '@/views/StoryDetailsView.vue'
 import StarredView from '@/views/StarredView.vue'
@@ -9,14 +9,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/all'
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/hot',
+      name: 'hot',
 
-      component: AboutView,
+      component: HotView,
     },
     {
       path: '/all',
@@ -35,5 +34,7 @@ const router = createRouter({
     }
   ],
 })
+
+
 
 export default router

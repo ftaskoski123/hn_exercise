@@ -16,12 +16,12 @@
   
   const stories = ref<any[]>([])
   
-  function loadFavorites() : any {
+  function loadFavorites() {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
     return savedFavorites
   }
   
-  function handleToggleFavorite(story: any) : void {
+  function handleToggleFavorite(story: any) {
     const favorites = loadFavorites()
     const storyIndex = favorites.indexOf(story.objectID)
   
@@ -32,11 +32,12 @@
       favorites.splice(storyIndex, 1)
       story.isFavorite = false
     }
+  
     localStorage.setItem('favorites', JSON.stringify(favorites))
   }
   
   onMounted(() => {
-    axios.get("http://hn.algolia.com/api/v1/search?tags=front_page").then((response) => {
+    axios.get("http://hn.algolia.com/api/v1/search?tags=front_page&numericFilters=points>400").then((response) => {
       const fetchedStories = response.data.hits
       const favorites = loadFavorites()
   

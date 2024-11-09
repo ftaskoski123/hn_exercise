@@ -1,7 +1,7 @@
 <template>
     <header class="fixed-header">
       <div class="header-content">
-        <img @click="$router.push({name:'home'})" class="logo" :src="hn_logo">
+        <img @click="$router.push({name:'all'})" class="logo" :src="hn_logo">
   
         <div class="title-container-to-right">
           <div class="title">
