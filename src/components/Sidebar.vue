@@ -2,7 +2,7 @@
     <aside class="sidebar">
       <nav>
         <ul class="nav-list">
-          <li class="nav-item">All</li>
+          <li @click="$router.push({name:'all'})" :class="{'nav-item-active':$route.name==='all'}" class="nav-item">All</li>
           <li @click="$router.push({name: 'about'})" class="nav-item">
             <img class="icon" :src="hotIcon" >
             Hot</li>
@@ -12,7 +12,7 @@
           <li class="nav-item">Jobs</li>
           <hr class="separator">
           <li class="nav-item">Shipow</li>
-          <li class="nav-item">
+          <li @click="$router.push({name:'starred'})" :class="{'nav-item-active':$route.name==='starred'}" class="nav-item">
             <img class="icon" :src="starIcon" >
             Starred
           </li>
@@ -53,6 +53,10 @@ import hotIcon from '../svgs/hot.svg'
   }
   
   .nav-item:hover {
+    background-color: #D1CEC4;
+  }
+
+  .nav-item-active{
     background-color: #D1CEC4;
   }
   
