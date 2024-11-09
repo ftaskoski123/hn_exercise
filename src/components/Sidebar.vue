@@ -2,16 +2,27 @@
     <aside class="sidebar">
       <nav>
         <ul class="nav-list">
-          <li @click="$router.push({name:'all'})" :class="{'nav-item-active':$route.name==='all'}" class="nav-item">All</li>
+          <li @click="$router.push({name:'all'})" :class="{'nav-item-active':$route.name==='all'}" class="nav-item">
+            <img class="icon" :src="newspaperIcon" >All</li>
           <li @click="$router.push({name: 'hot'})" :class="{'nav-item-active':$route.name==='hot'}" class="nav-item">
             <img class="icon" :src="hotIcon" >
             Hot</li>
-          <li class="nav-item">Show HN</li>
-          <li class="nav-item">Ask HN</li>
-          <li class="nav-item">Polls</li>
-          <li class="nav-item">Jobs</li>
+          <li class="nav-item">
+           <img class="icon" :src="speakerIcon" >
+            Show HN</li>
+          <li class="nav-item">
+            <img class="icon" :src="commentIcon" >
+            Ask HN</li>
+          <li class="nav-item">
+            <img class="icon" :src="bulbIcon" >
+            Polls</li>
+          <li class="nav-item">
+            <img class="icon" :src="cashIcon" >
+            Jobs</li>
           <hr class="separator">
-          <li class="nav-item">Shipow</li>
+          <li class="nav-item">
+            <img class="icon" :src="personIcon" >
+            Shipow</li>
           <li @click="$router.push({name:'starred'})" :class="{'nav-item-active':$route.name==='starred'}" class="nav-item">
             <img class="icon" :src="starIcon" >
             Starred
@@ -21,11 +32,16 @@
     </aside>
   </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
 import starIcon from '../svgs/star.svg'
 import hotIcon from '../svgs/hot.svg'
-
-  </script>
+import speakerIcon from '../svgs/speaker.svg'
+import commentIcon from '../svgs/comment.svg'
+import bulbIcon from '../svgs/bulb.svg'
+import cashIcon from '../svgs/cash.svg'
+import newspaperIcon from '../svgs/newspaper.svg'
+import personIcon from '../svgs/person.svg'
+</script>
   
   <style scoped>
   .sidebar {

@@ -12,7 +12,12 @@
   
         <div class="search-container">
           <img class="search-icon" :src="searchIcon" >
-          <input type="text" class="search-input" placeholder="Search stories by title, url or author">
+          <input
+          type="text"
+          class="search-input"
+          placeholder="Search stories by title, url or author"
+          @input="setSearchTerm(($event.target as HTMLInputElement).value)"
+          />        
         </div>
       </div>
   
@@ -25,6 +30,8 @@
   import searchIcon from '../svgs/search.svg'
   import hn_logo from '../assets/hn_logo.png'
   import algolia_logo from '../svgs/algolia_logo.svg'
+  import { setSearchTerm } from '@/store/searchStore';
+  
   </script>
   
   <style scoped>

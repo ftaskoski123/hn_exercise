@@ -8,7 +8,6 @@
           :key="index"
           class="comment-item"
         >
-          <!-- Parent Comment -->
           <div class="comment-author">
             <strong>{{ comment.author }}</strong>
           </div>
@@ -87,6 +86,8 @@ h1 {
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .comment-author {
@@ -101,7 +102,7 @@ h1 {
 }
 
 .child-comments {
-  margin-left: 2rem; /* Indent child comments */
+  margin-left: 2rem;
   padding-top: 1rem;
 }
 </style>

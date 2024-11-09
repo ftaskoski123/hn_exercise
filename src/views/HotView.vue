@@ -37,7 +37,7 @@
   }
   
   onMounted(() => {
-    axios.get("http://hn.algolia.com/api/v1/search?tags=front_page&numericFilters=points>400").then((response) => {
+    axios.get("http://hn.algolia.com/api/v1/search?tags=front_page&numericFilters=points>300").then((response) => {
       const fetchedStories = response.data.hits
       const favorites = loadFavorites()
   

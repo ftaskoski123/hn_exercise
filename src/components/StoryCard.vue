@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import starIcon from '../svgs/star.svg'
 import commentIcon from '../svgs/comment.svg'
 
@@ -110,6 +109,10 @@ const toggleFavorite = (story: any) : void => {
 
 .star-icon-active {
   background-color: yellow ; 
+}
+
+.star-icon-active:hover {
+  background-color: transparent;
 }
 
 .comment-icon-wrapper {
