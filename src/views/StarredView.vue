@@ -27,7 +27,7 @@
           </div>
         </div>
         <p class="story-author">by {{ story.author }}</p>
-        <a :href="story.url" target="_blank"  class="story-link">Read more</a>
+        <a :href="story.url" target="_blank"  class="story-link">{{ story.url }}</a>
       </div>
     </div>
   </div>

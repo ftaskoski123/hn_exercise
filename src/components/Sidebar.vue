@@ -7,16 +7,16 @@
           <li @click="$router.push({name: 'hot'})" :class="{'nav-item-active':$route.name==='hot'}" class="nav-item">
             <img class="icon" :src="hotIcon" >
             Hot</li>
-          <li class="nav-item">
+          <li  @click="$router.push({name:'show'})" :class="{'nav-item-active':$route.name==='show'}" class="nav-item">
            <img class="icon" :src="speakerIcon" >
             Show HN</li>
-          <li class="nav-item">
+          <li @click="$router.push({name:'ask'})" :class="{'nav-item-active':$route.name==='ask'}" class="nav-item">
             <img class="icon" :src="commentIcon" >
             Ask HN</li>
-          <li class="nav-item">
+          <li @click="$router.push({name:'polls'})" :class="{'nav-item-active':$route.name==='polls'}" class="nav-item">
             <img class="icon" :src="bulbIcon" >
             Polls</li>
-          <li class="nav-item">
+          <li @click="$router.push({name:'jobs'})" :class="{'nav-item-active':$route.name==='jobs'}" class="nav-item">
             <img class="icon" :src="cashIcon" >
             Jobs</li>
           <hr class="separator">
