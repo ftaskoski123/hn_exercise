@@ -31,6 +31,8 @@
         {{ props.story.author }}
         <img v-if="props.story.points" :src="heartIcon" class="heart-icon" />
         {{ props.story.points }}
+        <img  :src="clockIcon" class="clock-icon" />
+        {{ storyAge }}
       </p>
       <a :href="props.story.url" target="_blank" class="story-link" @click.stop>{{ props.story.url }}</a>
     </div>
@@ -42,12 +44,14 @@
 import commentIcon from '../svgs/comment.svg'
 import personIcon from '../svgs/person.svg'
 import heartIcon from '../svgs/heart.svg'
-
+import clockIcon from '../svgs/clock.svg'
+import {computed} from 'vue'
 const props = defineProps({
   story: {
     type: Object,
     required: true
   }
+
 })
 
 const emit = defineEmits(['favorite'])
@@ -55,6 +59,17 @@ const emit = defineEmits(['favorite'])
 const toggleFavorite = (story: any) : void => {
   emit('favorite', story)
 }
+const storyAge = computed(() => {
+  const now = new Date()
+  const storyDate = new Date(props.story.created_at)
+  const timeDiff = now.getTime() - storyDate.getTime()
+
+  const daysOld = Math.floor(timeDiff / (1000 * 3600 * 24))
+  const hoursOld = Math.floor(timeDiff / (1000 * 3600))
+
+  return daysOld < 1 ? `${hoursOld} hours ago` : `${daysOld} days ago`
+})
+
 </script>
 
 <style>
@@ -110,7 +125,7 @@ const toggleFavorite = (story: any) : void => {
   margin-right: 0.5rem;
 }
 
-.heart-icon {
+.heart-icon, .clock-icon {
   width: 1rem;
   height: 1rem;
   margin-left: 1rem; 

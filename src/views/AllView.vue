@@ -38,7 +38,7 @@ function handleToggleFavorite(story: any): void {
 
 function getStories(query: string): void {
   axios
-    .get(`http://hn.algolia.com/api/v1/search?query=${query}&tags=front_page`)
+    .get(`http://hn.algolia.com/api/v1/search?query=${query}&tags=(front_page,story,poll,show_hn,ask_hn)`)
     .then((response) => {
       const fetchedStories = response.data.hits
       const favorites = loadFavorites()
