@@ -50,10 +50,25 @@ const stories = ref<any[]>([])
 const selectedCategory = ref<string>('story')
 const selectedSort = ref<string>('points')
 const selectedTime = ref<string>('24h')
+const apiKey = import.meta.env.VITE_OG_API_KEY
 
 function loadFavorites() {
   const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
   return savedFavorites
+}
+
+function getGraph(url: string): Promise<any> {
+  //change 1 to api key, now disabled not to waste requests
+  return axios
+    .get(`https://opengraph.io/api/1.1/site/${encodeURIComponent(url)}?app_id=1`)
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching OpenGraph data:", error);
+      return null;
+    });
 }
 
 function handleToggleFavorite(story: any) {
@@ -78,13 +93,22 @@ function fetchStories() {
   const timeFilter = time === '24h' ? 'created_at_i>=' + (Date.now() - 86400000) / 1000 : 'created_at_i>=' + (Date.now() - 172800000) / 1000
 
   axios.get(`http://hn.algolia.com/api/v1/search?tags=${category}&numericFilters=${sort === 'points' ? 'points>100' : 'num_comments>20'},${timeFilter}`)
-    .then((response) => {
+    .then(async (response) => {
       const fetchedStories = response.data.hits
       const favorites = loadFavorites()
 
-      fetchedStories.forEach((story: any) => {
+      for (const story of fetchedStories) {
         story.isFavorite = favorites.includes(story.objectID)
-      })
+        
+        if (story.url) {
+          const openGraphData = await getGraph(story.url)
+          story.openGraphData = openGraphData ? {
+            title: openGraphData.hybridGraph.title,
+            description: openGraphData.hybridGraph.description,
+            image: openGraphData.hybridGraph.image
+          } : null
+        }
+      }
 
       stories.value = fetchedStories
     })

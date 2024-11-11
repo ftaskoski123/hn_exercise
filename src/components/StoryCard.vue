@@ -26,39 +26,46 @@
           </div>
         </div>
       </div>
+      
       <p class="story-author">
         <img :src="personIcon" class="person-icon" />
         {{ props.story.author }}
         <img v-if="props.story.points" :src="heartIcon" class="heart-icon" />
         {{ props.story.points }}
-        <img  :src="clockIcon" class="clock-icon" />
+        <img :src="clockIcon" class="clock-icon" />
         {{ storyAge }}
       </p>
-      <a :href="props.story.url" target="_blank" class="story-link" @click.stop>{{ props.story.url }}</a>
+      <div class="url-og-wrapper">
+        <a :href="props.story.url" @mouseenter="showPreview=true" target="_blank" class="story-link" @click.stop>{{ props.story.url }}</a>
+        <div  v-if="showPreview" class="og-section">
+          <img v-if="props.story.openGraphData.image" :src="props.story.openGraphData.image" alt="OpenGraph image" class="og-image" />
+          <h3 class="og-title">{{ props.story.openGraphData.title }}</h3>
+          <p class="og-description">{{ props.story.openGraphData.description }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import commentIcon from '../svgs/comment.svg'
 import personIcon from '../svgs/person.svg'
 import heartIcon from '../svgs/heart.svg'
 import clockIcon from '../svgs/clock.svg'
-import {computed} from 'vue'
+import {computed,ref} from 'vue'
 const props = defineProps({
   story: {
     type: Object,
     required: true
   }
-
 })
 
 const emit = defineEmits(['favorite'])
-
+const showPreview = ref<boolean>(false);
 const toggleFavorite = (story: any) : void => {
   emit('favorite', story)
 }
+
 const storyAge = computed(() => {
   const now = new Date()
   const storyDate = new Date(props.story.created_at)
@@ -69,7 +76,6 @@ const storyAge = computed(() => {
 
   return daysOld < 1 ? `${hoursOld} hours ago` : `${daysOld} days ago`
 })
-
 </script>
 
 <style>
@@ -132,8 +138,6 @@ const storyAge = computed(() => {
   margin-right: 0.5rem; 
 }
 
-
-
 .story-link {
   font-size: 0.9rem;
   color: #0073e6;
@@ -192,5 +196,50 @@ const storyAge = computed(() => {
   border-radius: 50%;
   transform: translate(50%, -50%);
 }
-</style>
 
+.url-og-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative; 
+}
+
+.og-section {
+  display: none; 
+  width: 30%;
+  padding: 0.5rem;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  position: absolute;
+  z-index: 100000 !important;
+  margin-bottom: 0.5rem;
+  right: 0;
+  bottom: -5.5rem;
+}
+
+.url-og-wrapper:hover .og-section {
+  display: block; 
+  z-index: 100000 !important;
+}
+
+.og-image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  z-index: 100000 !important;
+}
+
+.og-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.og-description {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+</style>
