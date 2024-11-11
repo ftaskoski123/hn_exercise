@@ -33,24 +33,32 @@
 
   <div class="stories-wrapper">
     <StoryCard
+      v-if="!loading"
       v-for="story in stories"
       :key="story.objectID"
       :story="story"
       @favorite="handleToggleFavorite"
     />
+    <div class="loading-container" v-else>
+      <p class="loading">Loading...</p>
+      <img class="loading-icon" :src="loadingIcon" />
+    </div>
   </div>
+  
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import StoryCard from '../components/StoryCard.vue'
+import loadingIcon from '../svgs/spinner.svg'
 
 const stories = ref<any[]>([])
 const selectedCategory = ref<string>('story')
 const selectedSort = ref<string>('points')
 const selectedTime = ref<string>('24h')
 const apiKey = import.meta.env.VITE_OG_API_KEY
+const loading = ref<boolean>(false);
 
 function loadFavorites() {
   const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
@@ -87,6 +95,7 @@ function handleToggleFavorite(story: any) {
 }
 
 function fetchStories() {
+  loading.value = true
   const category = selectedCategory.value
   const sort = selectedSort.value
   const time = selectedTime.value
@@ -111,6 +120,8 @@ function fetchStories() {
       }
 
       stories.value = fetchedStories
+
+      loading.value = false
     })
 }
 

@@ -20,9 +20,7 @@
             <img class="icon" :src="cashIcon" >
             Jobs</li>
           <hr class="separator">
-          <li class="nav-item">
-            <img class="icon" :src="personIcon" >
-            Shipow</li>
+
           <li @click="$router.push({name:'starred'})" :class="{'nav-item-active':$route.name==='starred'}" class="nav-item">
             <img class="icon" :src="starIcon" >
             Starred

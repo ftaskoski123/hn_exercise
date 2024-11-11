@@ -7,7 +7,12 @@
       :story="story"
       @favorite="removeStory(story.id)"
       :isFavorite="true"
+      v-if="!loading"
     />
+    <div class="loading-container" v-else>
+      <p class="loading">Loading...</p>
+      <img class="loading-icon" :src="loadingIcon" />
+    </div>
   </div>
 </template>
 
@@ -15,22 +20,50 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import StoryCard from '../components/StoryCard.vue'
+import loadingIcon from '../svgs/spinner.svg'
 
 const favoritesId = ref<string[]>([]) 
 const favorites = ref<any[]>([])
+const loading = ref<boolean>(false);
+const apiKey = import.meta.env.VITE_OG_API_KEY
+
+function getGraph(url: string): Promise<any> {
+  //change 1 to api key, now disabled not to waste requests
+  return axios
+    .get(`https://opengraph.io/api/1.1/site/${encodeURIComponent(url)}?app_id=1`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return null;
+    });
+}
+
 
 onMounted(() => {
   favoritesId.value = JSON.parse(localStorage.getItem('favorites') || '[]')
   favoritesId.value.forEach((id) => {
-    axios.get(`https://hn.algolia.com/api/v1/items/${id}`).then((response) => {
+    loading.value = true
+    axios.get(`https://hn.algolia.com/api/v1/items/${id}`).then(async(response) => {
       const story = response.data
+      if (story.url) {
+          const openGraphData = await getGraph(story.url)
+          story.openGraphData = openGraphData ? {
+            title: openGraphData.hybridGraph.title,
+            description: openGraphData.hybridGraph.description,
+            image: openGraphData.hybridGraph.image
+          } : null
+        }      
       story.isFavorite = true
       favorites.value.push(story)
+      loading.value = false
+
     })
   })
 })
 
-function removeStory(storyId: string): void {
+
+function removeStory(storyId: number): void {
   favorites.value = favorites.value.filter((story) => {
     return story.id !== storyId
   })

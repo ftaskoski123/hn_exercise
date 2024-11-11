@@ -5,7 +5,12 @@
         :key="story.objectID"
         :story="story"
         @favorite="handleToggleFavorite"
+        v-if="!loading"
       />
+      <div class="loading-container" v-else>
+      <p class="loading">Loading...</p>
+      <img class="loading-icon" :src="loadingIcon" />
+    </div>
     </div>
   </template>
   
@@ -14,8 +19,10 @@
   import axios from 'axios'
   import StoryCard from '../components/StoryCard.vue'
   import { searchTerm } from '@/store/searchStore'
+  import loadingIcon from '../svgs/spinner.svg'
   
   const stories = ref<any[]>([])
+  const loading = ref<boolean>(false);
   
   function loadFavorites(): string[] {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
@@ -37,6 +44,7 @@
   }
   
   function getStories(query: string): void {
+    loading.value = true
     axios
       .get(`https://hn.algolia.com/api/v1/search?query=${query}&tags=poll`)
       .then((response) => {
@@ -47,6 +55,8 @@
           story.isFavorite = favorites.includes(story.objectID)
         })
         stories.value = fetchedStories
+  
+        loading.value = false
       })
   }
   

@@ -5,7 +5,12 @@
         :key="story.objectID"
         :story="story"
         @favorite="handleToggleFavorite"
+        v-if="!loading"
       />
+      <div class="loading-container" v-else>
+      <p class="loading">Loading...</p>
+      <img class="loading-icon" :src="loadingIcon" />
+    </div>
     </div>
   </template>
   
@@ -14,9 +19,12 @@
   import axios from 'axios'
   import StoryCard from '../components/StoryCard.vue'
   import { searchTerm } from '@/store/searchStore'
-  
+  import loadingIcon from '../svgs/spinner.svg'
+
+  const loading = ref<boolean>(false);
   const stories = ref<any[]>([])
-  
+  const apiKey = import.meta.env.VITE_OG_API_KEY
+
   function loadFavorites(): string[] {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
     return savedFavorites
@@ -35,20 +43,45 @@
     }
     localStorage.setItem('favorites', JSON.stringify(favorites))
   }
+
+  function getGraph(url: string): Promise<any> {
+  //change 1 to api key, now disabled not to waste requests
+  return axios
+    .get(`https://opengraph.io/api/1.1/site/${encodeURIComponent(url)}?app_id=1`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return null;
+    });
+}
   
-  function getStories(query: string): void {
-    axios
-      .get(`https://hn.algolia.com/api/v1/search?query=${query}&tags=show_hn`)
-      .then((response) => {
-        const fetchedStories = response.data.hits
-        const favorites = loadFavorites()
-  
-        fetchedStories.forEach((story: any) => {
-          story.isFavorite = favorites.includes(story.objectID)
-        })
-        stories.value = fetchedStories
-      })
-  }
+function getStories(query: string): void {
+  loading.value = true
+  axios
+    .get(`http://hn.algolia.com/api/v1/search?query=${query}&tags=show_hn`)
+    .then(async (response) => {
+      const fetchedStories = response.data.hits
+      const favorites = loadFavorites()
+
+      for (const story of fetchedStories) {
+        story.isFavorite = favorites.includes(story.objectID)
+        
+        if (story.url) {
+          const openGraphData = await getGraph(story.url)
+          story.openGraphData = openGraphData ? {
+            title: openGraphData.hybridGraph.title,
+            description: openGraphData.hybridGraph.description,
+            image: openGraphData.hybridGraph.image
+          } : null
+        }
+      }
+
+      stories.value = fetchedStories
+      
+      loading.value = false
+    })
+}
   
   watch(() => searchTerm.value, (newSearchTerm) => {
       getStories(newSearchTerm) 
