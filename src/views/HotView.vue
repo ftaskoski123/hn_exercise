@@ -134,14 +134,14 @@ watch([selectedCategory, selectedSort, selectedTime], () => {
 .new-background {
   background-color: #f7fafc;
   width: 100%;
-  height: 20vh;
+  height: 30vh;
 }
 .filters-wrapper {
   display: flex;
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-top: 5rem;
   margin-left: 15rem;
 
 }
@@ -177,7 +177,6 @@ watch([selectedCategory, selectedSort, selectedTime], () => {
 .stories-wrapper {
   display: flex;
   flex-direction: column;
-  margin-top: -2rem;
   margin-left: 15rem;
 
 }
